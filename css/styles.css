@@ -1,0 +1,27 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  min-height: 100vh;
+  background-image: url(../images/room-bg.png);
+  background-size: contain;
+  background-position: center;
+  background-attachment: fixed;
+  background-repeat: no-repeat;
+  background-color: #bfa177;
+}
+
+.sprite {
+    position: absolute;
+    left: 155px;
+    top: 73vh;
+    width: 250px;
+    height: 200px;
+    background-image: url(../images/right-dog.png);
+    background-size: 1040px 400px;
+    background-position: -250px -200px; /* row 1, col 1 = lying down */
+    background-repeat: no-repeat;
+}
