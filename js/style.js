@@ -58,6 +58,13 @@ function setup () {
   nn.get('#click-desk').on('click', showPopUp)
   nn.get('#click-shoes').on('click', showPopUp)
   nn.get('.pop-up-exit').on('click', hidePopUp)
+
+  // show instructions on load
+  activeTextId = '#instructions-text'
+  nn.get('.pop-up-text').css('visibility', 'visible')
+  nn.get('.pop-up-exit').css('visibility', 'visible')
+  nn.get('.pop-up-exit').css('pointer-events', 'auto')
+  nn.get('#instructions-text').css('visibility', 'visible')
 }
 
 function move (e) {
