@@ -1,3 +1,10 @@
+@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@100..900&display=swap');
+
+@font-face {
+  font-family: 'Minecraftia';
+  src: url(../minecraftia/Minecraftia-Regular.ttf);
+}
+
 * {
   margin: 0;
   padding: 0;
@@ -12,6 +19,7 @@ body {
   background-attachment: fixed;
   background-repeat: no-repeat;
   background-color: #bfa177;
+  overflow: hidden;
 }
 
 .sprite {
@@ -195,4 +203,65 @@ body {
   pointer-events: none;
   visibility: hidden;
   z-index: 12;
+  cursor: pointer;
+}
+
+.text-box {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: min(80vw, 80vh);
+  height: min(75vw, 75vh);
+  /* outline: 2px solid red; */
+  pointer-events: none;
+  z-index: 13;
+}
+
+.dog-pics {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+}
+
+.dog-pics img {
+  width: 45%;
+  border-radius: 8px;
+}
+
+#dog-pic, #with-dog-pic {
+  display: inline-block;
+  width: 45%;
+  margin-top: 10px;
+  margin-bottom: 10px;
+  border-radius: 8px;
+}
+
+#about-me-text {
+  text-align: center;
+}
+
+#about-me-text p {
+  text-align: left;
+}
+
+.text {
+  position: absolute;
+  z-index: 14;
+  color: #4e749c;
+  visibility: hidden;
+  text-align: left;
+  width: 90%;
+  height: 80%;
+  top: 10%;
+  left: 5%;
+  font-family: 'Outfit', sans-serif;
+  word-spacing: 5px;
+  overflow-y: auto;
+  pointer-events: auto;
+}
+
+a {
+  color: #4e749c;
+  cursor: pointer;
 }

@@ -13,6 +13,15 @@ const ROW_RIGHT_SIT = 1
 const ROW_LEFT_WALK = 2
 const ROW_LEFT_SIT = 3
 
+// locally stored data
+const data = {
+  'click-bed':   { glow: '#glow-bed',   text: '#about-me-text' },
+  'click-desk':  { glow: '#glow-desk',  text: '#projects-text' },
+  'click-shoes': { glow: '#glow-shoes', text: '#experiences-text' }
+}
+
+let activeTextId = null
+
 // returns true if next move is blocked, false if not
 function isBlocked (x, y) {
   const sprite  = nn.get('.sprite')
@@ -45,9 +54,9 @@ function setup () {
   sprite.data.facing = 'right'
   sprite.data.moved = false
 
-  nn.get('#click-bed').on('click', popUp)
-  nn.get('#click-desk').on('click', popUp)
-  nn.get('#click-shoes').on('click', popUp)
+  nn.get('#click-bed').on('click', showPopUp)
+  nn.get('#click-desk').on('click', showPopUp)
+  nn.get('#click-shoes').on('click', showPopUp)
   nn.get('.pop-up-exit').on('click', hidePopUp)
 }
 
@@ -140,24 +149,26 @@ function nearObject () {
     const closestX = Math.max(element.left, Math.min(dogCX, element.right))
     const closestY = Math.max(element.top,  Math.min(dogCY, element.bottom))
     const dist = Math.hypot(dogCX - closestX, dogCY - closestY)
-    nn.get(obj.glow).css('visibility', dist < obj.threshold ? 'visible' : 'hidden')
+    const near = dist < obj.threshold
+    nn.get(obj.clicker).data.near = near
+    nn.get(obj.glow).css('visibility', near ? 'visible' : 'hidden')
+    nn.get(obj.clicker).css('cursor', near ? 'pointer' : 'default')
   }
 }
 
-function popUp () {
-  const glowMap = {
-    'click-bed':   '#glow-bed',
-    'click-desk':  '#glow-desk',
-    'click-shoes': '#glow-shoes'
-  }
-  const glowId = glowMap[this.id]
-  if (document.querySelector(glowId).style.visibility !== 'visible') return
+function showPopUp () {
+  if (!nn.get('#' + this.id).data.near) return
+  const text = data[this.id].text
+  activeTextId = text
   nn.get('.pop-up-text').css('visibility', 'visible')
   nn.get('.pop-up-exit').css('visibility', 'visible')
   nn.get('.pop-up-exit').css('pointer-events', 'auto')
+  nn.get(text).css('visibility', 'visible')
 }
 
 function hidePopUp () {
+  if (activeTextId) nn.get(activeTextId).css('visibility', 'hidden')
+  activeTextId = null
   nn.get('.pop-up-text').css('visibility', 'hidden')
   nn.get('.pop-up-exit').css('visibility', 'hidden')
   nn.get('.pop-up-exit').css('pointer-events', 'none')
