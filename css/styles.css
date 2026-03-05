@@ -13,7 +13,8 @@
 
 body {
   min-height: 100vh;
-  background-image: url(../images/room-bg.png);
+  background-image: url(../images/background.png);
+  outline: 2px solid red;
   background-size: contain;
   background-position: center;
   background-attachment: fixed;
@@ -22,29 +23,90 @@ body {
   overflow: hidden;
 }
 
+#bed {
+  position: fixed;
+  width: calc(min(100vw, 100vh) * 0.25);
+  height: calc(min(100vw, 100vh) * 0.37);
+  left: calc(50vw - min(100vw, 100vh) * 0.45);
+  top: calc(50vh - min(100vw, 100vh) * 0.29);
+  pointer-events: none;
+  outline: 2px solid red;
+}
+
+#desk {
+  position: fixed;
+  width: calc(min(100vw, 100vh) * 0.32);
+  height: calc(min(100vw, 100vh) * 0.26);
+  left: calc(50vw - min(100vw, 100vh) * -0.14);
+  top: calc(50vh - min(100vw, 100vh) * 0.27);
+  pointer-events: none;
+  outline: 2px solid red;
+}
+
+#chair {
+  position: fixed;
+  width: calc(min(100vw, 100vh) * 0.13);
+  height: calc(min(100vw, 100vh) * 0.18);
+  left: calc(50vw + min(100vw, 100vh) * 0.22);
+  top: calc(50vh - min(100vw, 100vh) * 0.08);
+  pointer-events: none;
+  outline: 2px solid red;
+}
+
+#dog-bed {
+  position: fixed;
+  width: calc(min(100vw, 100vh) * 0.27);
+  height: calc(min(100vw, 100vh) * 0.17);
+  left: calc(50vw - min(100vw, 100vh) * 0.46);
+  top: calc(50vh + min(100vw, 100vh) * 0.3);
+  pointer-events: none;
+  outline: 2px solid red;
+}
+
+#door {
+  position: fixed;
+  width: calc(min(100vw, 100vh) * 0.30);
+  height: calc(min(100vw, 100vh) * 0.03);
+  left: calc(50vw + min(100vw, 100vh) * 0.12);
+  top: calc(50vh + min(100vw, 100vh) * 0.44);
+  pointer-events: none;
+  outline: 2px solid red;
+}
+
+#shoes {
+  position: fixed;
+  width: calc(min(100vw, 100vh) * 0.09);
+  height: calc(min(100vw, 100vh) * 0.09);
+  left: calc(50vw - min(100vw, 100vh) * 0.08);
+  top: calc(50vh - min(100vw, 100vh) * -0.38);
+  pointer-events: none;
+  outline: 2px solid red;
+}
+
 .sprite {
   /* outline: 2px solid red; */
-  position: absolute;
-  left: 240px;
-  top: 83vh;
-  width: 145px;
-  height: 106px;
-  background-repeat: no-repeat;
+  position: fixed;
+  left: calc(50vw - min(100vw, 100vh) * 0.3875);
+  top: calc(50vh + min(100vw, 100vh) * 0.3305);
+  width: calc(min(100vw, 100vh) * 0.15);
+  height: calc(min(100vw, 100vh) * 0.10965);
   background-repeat: no-repeat;
   z-index: 10;
+  outline: 2px solid red;
 }
 
 .laying-down {
-  position: absolute;
-  left: 240px;
-  top: 83vh;
-  width: 172px;
-  height: 79px;
+  position: fixed;
+  left: calc(50vw - min(100vw, 100vh) * 0.4125);
+  top: calc(50vh + min(100vw, 100vh) * 0.3375);
+  width: calc(min(100vw, 100vh) * 0.185);
+  height: calc(min(100vw, 100vh) * 0.085);
   background-image: url(../images/laying-down-dog.png);
-  background-size: 614px 455px;
+  background-size: calc(min(100vw, 100vh) * 0.661) calc(min(100vw, 100vh) * 0.489);
   background-position: center;
   background-repeat: no-repeat;
   z-index: 10;
+  outline: 2px solid red;
 }
 
 .glow {
@@ -81,7 +143,7 @@ body {
   background-size: contain;
 }
 
-.blocker {
+/* .blocker {
   position: absolute;
   background: rgba(255, 0, 0, 0);
 }
@@ -173,7 +235,7 @@ body {
   top: 42%;
   width: 10%;
   height: 16%;
-}
+} */
 
 .pop-up-text {
   position: fixed;

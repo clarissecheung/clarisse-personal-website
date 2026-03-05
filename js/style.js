@@ -23,7 +23,7 @@ const data = {
 let activeTextId = null
 
 // returns true if next move is blocked, false if not
-function isBlocked (x, y) {
+/* function isBlocked (x, y) {
   const sprite  = nn.get('.sprite')
   const blockers = document.querySelectorAll('.blocker')
 
@@ -45,7 +45,7 @@ function isBlocked (x, y) {
     }
   }
   return false
-}
+} */
 
 // just to set up the initial position
 function setup () {
@@ -54,9 +54,9 @@ function setup () {
   sprite.data.facing = 'right'
   sprite.data.moved = false
 
-  nn.get('#click-bed').on('click', showPopUp)
-  nn.get('#click-desk').on('click', showPopUp)
-  nn.get('#click-shoes').on('click', showPopUp)
+  // nn.get('#click-bed').on('click', showPopUp)
+  // nn.get('#click-desk').on('click', showPopUp)
+  // nn.get('#click-shoes').on('click', showPopUp)
   nn.get('.pop-up-exit').on('click', hidePopUp)
 
   // show instructions on load
@@ -106,17 +106,20 @@ function move (e) {
   if (!sprite.data.moved) {
     nn.get('.laying-down').css('display', 'none')
     sprite.css('background-image', 'url(images/sprite-sheet.png)')
-    sprite.css('background-size', '614px 455px')
     sprite.data.moved = true
   }
 
-  const x = isBlocked(newX, curY) ? curX : newX
-  const y = isBlocked(curX, newY) ? curY : newY
+  // const x = isBlocked(newX, curY) ? curX : newX
+  // const y = isBlocked(curX, newY) ? curY : newY
+  const x = newX
+  const y = newY
 
-  const sx = -(CROP_X + frame * STEP_X)
-  const sy = -(CROP_Y + row  * STEP_Y)
+  const scale = sprite.width / FRAME_W
+  const sx = -(CROP_X + frame * STEP_X) * scale
+  const sy = -(CROP_Y + row  * STEP_Y) * scale
 
   sprite.position(x, y)
+  sprite.css('background-size', `${614 * scale}px ${455 * scale}px`)
   sprite.css('background-position', `${sx}px ${sy}px`)
 
   sprite.data.frame  = frame
@@ -132,11 +135,18 @@ function sit (e) {
   if (!sprite.data.moved) return
 
   const row = sprite.data.facing === 'left' ? ROW_LEFT_SIT : ROW_RIGHT_SIT
-  const sx = -(CROP_X)
-  const sy = -(CROP_Y + row * STEP_Y)
+  const scale = sprite.width / FRAME_W
+  const sx = -(CROP_X) * scale
+  const sy = -(CROP_Y + row * STEP_Y) * scale
+  sprite.css('background-size', `${614 * scale}px ${455 * scale}px`)
   sprite.css('background-position', `${sx}px ${sy}px`)
   nearObject()
 }
+
+// canvas-relative zones (fractions of the square canvas) for each interactive object
+const objects = [
+  { glow: '#glow-bed', left: 0.02, top: 0.11, right: 0.155, bottom: 0.31, threshold: 75 }
+]
 
 function nearObject () {
   const sprite = nn.get('.sprite')
@@ -145,25 +155,25 @@ function nearObject () {
   const dogCX = sprite.left + sprite.width  / 2
   const dogCY = sprite.top  + sprite.height / 2
 
-  const objects = [
-    { clicker: '#click-bed', glow: '#glow-bed', threshold: 75 },
-    { clicker: '#click-desk', glow: '#glow-desk', threshold: 75 },
-    { clicker: '#click-shoes', glow: '#glow-shoes', threshold: 100 }
-  ]
+  const S     = Math.min(window.innerWidth, window.innerHeight)
+  const cLeft = (window.innerWidth  - S) / 2
+  const cTop  = (window.innerHeight - S) / 2
 
   for (const obj of objects) {
-    const element = nn.get(obj.clicker)
-    const closestX = Math.max(element.left, Math.min(dogCX, element.right))
-    const closestY = Math.max(element.top,  Math.min(dogCY, element.bottom))
+    const rect = {
+      left:   cLeft + obj.left   * S,
+      right:  cLeft + obj.right  * S,
+      top:    cTop  + obj.top    * S,
+      bottom: cTop  + obj.bottom * S
+    }
+    const closestX = Math.max(rect.left, Math.min(dogCX, rect.right))
+    const closestY = Math.max(rect.top,  Math.min(dogCY, rect.bottom))
     const dist = Math.hypot(dogCX - closestX, dogCY - closestY)
-    const near = dist < obj.threshold
-    nn.get(obj.clicker).data.near = near
-    nn.get(obj.glow).css('visibility', near ? 'visible' : 'hidden')
-    nn.get(obj.clicker).css('cursor', near ? 'pointer' : 'default')
+    nn.get(obj.glow).css('visibility', dist < obj.threshold ? 'visible' : 'hidden')
   }
 }
 
-function showPopUp () {
+/* function showPopUp () {
   if (!nn.get('#' + this.id).data.near) return
   const text = data[this.id].text
   activeTextId = text
@@ -171,7 +181,7 @@ function showPopUp () {
   nn.get('.pop-up-exit').css('visibility', 'visible')
   nn.get('.pop-up-exit').css('pointer-events', 'auto')
   nn.get(text).css('visibility', 'visible')
-}
+} */
 
 function hidePopUp () {
   if (activeTextId) nn.get(activeTextId).css('visibility', 'hidden')
