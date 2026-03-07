@@ -22,31 +22,6 @@ const data = {
 
 let activeTextId = null
 
-// returns true if next move is blocked, false if not
-/* function isBlocked (x, y) {
-  const sprite  = nn.get('.sprite')
-  const blockers = document.querySelectorAll('.blocker')
-
-  // temporarily move sprite to test position, read its viewport rect, then restore
-  const origX = sprite.x
-  const origY = sprite.y
-  sprite.position(x, y)
-  const dogLeft = sprite.left
-  const dogRight = sprite.right
-  const dogTop = sprite.top
-  const dogBottom = sprite.bottom
-  sprite.position(origX, origY)
-
-  for (const b of blockers) {
-    const r = b.getBoundingClientRect()
-    if (dogRight > r.left && dogLeft < r.right &&
-        dogBottom > r.top  && dogTop < r.bottom) {
-      return true
-    }
-  }
-  return false
-} */
-
 // just to set up the initial position
 function setup () {
   const sprite = nn.get('.sprite')
@@ -54,10 +29,12 @@ function setup () {
   sprite.data.facing = 'right'
   sprite.data.moved = false
 
-  // nn.get('#click-bed').on('click', showPopUp)
-  // nn.get('#click-desk').on('click', showPopUp)
-  // nn.get('#click-shoes').on('click', showPopUp)
   nn.get('.pop-up-exit').on('click', hidePopUp)
+  const glowOn = id => document.getElementById(id).style.visibility === 'visible'
+  nn.get('#bed').on('click',   () => { if (glowOn('glow-bed'))   showPopUp('#about-me-text')   })
+  nn.get('#desk').on('click',  () => { if (glowOn('glow-desk'))  showPopUp('#projects-text')   })
+  nn.get('#chair').on('click', () => { if (glowOn('glow-desk'))  showPopUp('#projects-text')   })
+  nn.get('#shoes').on('click', () => { if (glowOn('glow-shoes')) showPopUp('#experiences-text') })
 
   // show instructions on load
   activeTextId = '#instructions-text'
@@ -65,6 +42,15 @@ function setup () {
   nn.get('.pop-up-exit').css('visibility', 'visible')
   nn.get('.pop-up-exit').css('pointer-events', 'auto')
   nn.get('#instructions-text').css('visibility', 'visible')
+}
+
+function showPopUp (textId) {
+  if (activeTextId) nn.get(activeTextId).css('visibility', 'hidden')
+  activeTextId = textId
+  nn.get('.pop-up-text').css('visibility', 'visible')
+  nn.get('.pop-up-exit').css('visibility', 'visible')
+  nn.get('.pop-up-exit').css('pointer-events', 'auto')
+  nn.get(textId).css('visibility', 'visible')
 }
 
 function move (e) {
@@ -109,10 +95,26 @@ function move (e) {
     sprite.data.moved = true
   }
 
-  // const x = isBlocked(newX, curY) ? curX : newX
-  // const y = isBlocked(curX, newY) ? curY : newY
-  const x = newX
-  const y = newY
+  const bounds = document.getElementById('bounds-box').getBoundingClientRect()
+  const sw = sprite.width
+  const sh = sprite.height
+
+  const candX = Math.max(bounds.left, Math.min(newX, bounds.right - sw))
+  const candY = Math.max(bounds.top, Math.min(newY, bounds.bottom - sh))
+
+  const obstacles = ['shoes', 'door', 'bed-box', 'desk-box', 'chair-box']
+    .map(id => document.getElementById(id).getBoundingClientRect())
+
+  let x = candX
+  let y = candY
+  for (const obs of obstacles) {
+    if (x < obs.right && x + sw > obs.left && curY < obs.bottom && curY + sh > obs.top) {
+      x = x > curX ? obs.left - sw : obs.right
+    }
+    if (curX < obs.right && curX + sw > obs.left && y < obs.bottom && y + sh > obs.top) {
+      y = y > curY ? obs.top - sh : obs.bottom
+    }
+  }
 
   const scale = sprite.width / FRAME_W
   const sx = -(CROP_X + frame * STEP_X) * scale
@@ -124,6 +126,8 @@ function move (e) {
 
   sprite.data.frame  = frame
   sprite.data.facing = facing
+  sprite.data.relX = (x - bounds.left) / bounds.width
+  sprite.data.relY = (y - bounds.top)  / bounds.height
   nearObject()
 }
 
@@ -143,9 +147,11 @@ function sit (e) {
   nearObject()
 }
 
-// canvas-relative zones (fractions of the square canvas) for each interactive object
-const objects = [
-  { glow: '#glow-bed', left: 0.02, top: 0.11, right: 0.155, bottom: 0.31, threshold: 75 }
+const glowMap = [
+  { box: 'shoes',     glow: '#glow-shoes' },
+  { box: 'bed-box',   glow: '#glow-bed'   },
+  { box: 'desk-box',  glow: '#glow-desk'  },
+  { box: 'chair-box', glow: '#glow-desk'  }
 ]
 
 function nearObject () {
@@ -155,33 +161,23 @@ function nearObject () {
   const dogCX = sprite.left + sprite.width  / 2
   const dogCY = sprite.top  + sprite.height / 2
 
-  const S     = Math.min(window.innerWidth, window.innerHeight)
-  const cLeft = (window.innerWidth  - S) / 2
-  const cTop  = (window.innerHeight - S) / 2
-
-  for (const obj of objects) {
-    const rect = {
-      left:   cLeft + obj.left   * S,
-      right:  cLeft + obj.right  * S,
-      top:    cTop  + obj.top    * S,
-      bottom: cTop  + obj.bottom * S
-    }
+  const glowVisible = {}
+  for (const { box, glow } of glowMap) {
+    const rect = document.getElementById(box).getBoundingClientRect()
     const closestX = Math.max(rect.left, Math.min(dogCX, rect.right))
     const closestY = Math.max(rect.top,  Math.min(dogCY, rect.bottom))
     const dist = Math.hypot(dogCX - closestX, dogCY - closestY)
-    nn.get(obj.glow).css('visibility', dist < obj.threshold ? 'visible' : 'hidden')
+    if (dist < 100) glowVisible[glow] = true
   }
-}
+  for (const { glow } of glowMap) {
+    nn.get(glow).css('visibility', glowVisible[glow] ? 'visible' : 'hidden')
+  }
 
-/* function showPopUp () {
-  if (!nn.get('#' + this.id).data.near) return
-  const text = data[this.id].text
-  activeTextId = text
-  nn.get('.pop-up-text').css('visibility', 'visible')
-  nn.get('.pop-up-exit').css('visibility', 'visible')
-  nn.get('.pop-up-exit').css('pointer-events', 'auto')
-  nn.get(text).css('visibility', 'visible')
-} */
+  document.getElementById('bed').style.cursor   = glowVisible['#glow-bed']   ? 'pointer' : 'default'
+  document.getElementById('desk').style.cursor  = glowVisible['#glow-desk']  ? 'pointer' : 'default'
+  document.getElementById('chair').style.cursor = glowVisible['#glow-desk']  ? 'pointer' : 'default'
+  document.getElementById('shoes').style.cursor = glowVisible['#glow-shoes'] ? 'pointer' : 'default'
+}
 
 function hidePopUp () {
   if (activeTextId) nn.get(activeTextId).css('visibility', 'hidden')
@@ -191,6 +187,26 @@ function hidePopUp () {
   nn.get('.pop-up-exit').css('pointer-events', 'none')
 }
 
+function reposition () {
+  const sprite = nn.get('.sprite')
+  if (!sprite.data.moved || sprite.data.relX === undefined) return
+
+  const bounds = document.getElementById('bounds-box').getBoundingClientRect()
+  const x = bounds.left + sprite.data.relX * bounds.width
+  const y = bounds.top  + sprite.data.relY * bounds.height
+
+  sprite.position(x, y)
+
+  const scale = sprite.width / FRAME_W
+  const row = sprite.data.facing === 'left' ? ROW_LEFT_SIT : ROW_RIGHT_SIT
+  const sx = -CROP_X * scale
+  const sy = -(CROP_Y + row * STEP_Y) * scale
+  sprite.css('background-size', `${614 * scale}px ${455 * scale}px`)
+  sprite.css('background-position', `${sx}px ${sy}px`)
+  nearObject()
+}
+
 nn.on('load', setup)
 nn.on('keydown', move)
 nn.on('keyup', sit)
+nn.on('resize', reposition)

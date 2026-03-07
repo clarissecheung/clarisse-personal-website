@@ -14,7 +14,7 @@
 body {
   min-height: 100vh;
   background-image: url(../images/background.png);
-  outline: 2px solid red;
+  /* outline: 2px solid red; */
   background-size: contain;
   background-position: center;
   background-attachment: fixed;
@@ -29,18 +29,18 @@ body {
   height: calc(min(100vw, 100vh) * 0.37);
   left: calc(50vw - min(100vw, 100vh) * 0.45);
   top: calc(50vh - min(100vw, 100vh) * 0.29);
-  pointer-events: none;
-  outline: 2px solid red;
+  pointer-events: auto;
+  /* outline: 2px solid red; */
 }
 
 #desk {
   position: fixed;
   width: calc(min(100vw, 100vh) * 0.32);
   height: calc(min(100vw, 100vh) * 0.26);
-  left: calc(50vw - min(100vw, 100vh) * -0.14);
+  left: calc(50vw - min(100vw, 100vh) * -0.13);
   top: calc(50vh - min(100vw, 100vh) * 0.27);
-  pointer-events: none;
-  outline: 2px solid red;
+  pointer-events: auto;
+  /* outline: 2px solid red; */
 }
 
 #chair {
@@ -49,8 +49,8 @@ body {
   height: calc(min(100vw, 100vh) * 0.18);
   left: calc(50vw + min(100vw, 100vh) * 0.22);
   top: calc(50vh - min(100vw, 100vh) * 0.08);
-  pointer-events: none;
-  outline: 2px solid red;
+  pointer-events: auto;
+  /* outline: 2px solid red; */
 }
 
 #dog-bed {
@@ -60,7 +60,7 @@ body {
   left: calc(50vw - min(100vw, 100vh) * 0.46);
   top: calc(50vh + min(100vw, 100vh) * 0.3);
   pointer-events: none;
-  outline: 2px solid red;
+  /* outline: 2px solid red; */
 }
 
 #door {
@@ -70,7 +70,7 @@ body {
   left: calc(50vw + min(100vw, 100vh) * 0.12);
   top: calc(50vh + min(100vw, 100vh) * 0.44);
   pointer-events: none;
-  outline: 2px solid red;
+  /* outline: 2px solid red; */
 }
 
 #shoes {
@@ -79,8 +79,69 @@ body {
   height: calc(min(100vw, 100vh) * 0.09);
   left: calc(50vw - min(100vw, 100vh) * 0.08);
   top: calc(50vh - min(100vw, 100vh) * -0.38);
+  pointer-events: auto;
+  /* outline: 2px solid red; */
+}
+
+:root {
+  --room-x: 0.025;
+  --room-y: 0.22;
+  --room-w: 0.95;
+  --room-h: 0.75;
+
+  --bed-x: 0.05;
+  --bed-y: 0.21;
+  --bed-w: 0.25;
+  --bed-h: 0.29;
+
+  --desk-x: 0.627;
+  --desk-y: 0.22;
+  --desk-w: 0.33;
+  --desk-h: 0.2;
+
+  --chair-x: 0.716;
+  --chair-y: 0.4;
+  --chair-w: 0.14;
+  --chair-h: 0.13;
+}
+
+#bounds-box {
+  position: fixed;
+  left: calc((100vw - min(100vw, 100vh)) / 2 + min(100vw, 100vh) * var(--room-x));
+  top: calc((100vh - min(100vw, 100vh)) / 2 + min(100vw, 100vh) * var(--room-y));
+  width: calc(min(100vw, 100vh) * var(--room-w));
+  height: calc(min(100vw, 100vh) * var(--room-h));
+  /* border: 2px solid red; */
   pointer-events: none;
-  outline: 2px solid red;
+  z-index: 100;
+}
+
+#bed-box, #desk-box, #chair-box {
+  position: fixed;
+  /* border: 2px solid blue; */
+  pointer-events: none;
+  z-index: 100;
+}
+
+#bed-box {
+  left: calc((100vw - min(100vw, 100vh)) / 2 + min(100vw, 100vh) * var(--bed-x));
+  top: calc((100vh - min(100vw, 100vh)) / 2 + min(100vw, 100vh) * var(--bed-y));
+  width: calc(min(100vw, 100vh) * var(--bed-w));
+  height: calc(min(100vw, 100vh) * var(--bed-h));
+}
+
+#desk-box {
+  left: calc((100vw - min(100vw, 100vh)) / 2 + min(100vw, 100vh) * var(--desk-x));
+  top: calc((100vh - min(100vw, 100vh)) / 2 + min(100vw, 100vh) * var(--desk-y));
+  width: calc(min(100vw, 100vh) * var(--desk-w));
+  height: calc(min(100vw, 100vh) * var(--desk-h));
+}
+
+#chair-box {
+  left: calc((100vw - min(100vw, 100vh)) / 2 + min(100vw, 100vh) * var(--chair-x));
+  top: calc((100vh - min(100vw, 100vh)) / 2 + min(100vw, 100vh) * var(--chair-y));
+  width: calc(min(100vw, 100vh) * var(--chair-w));
+  height: calc(min(100vw, 100vh) * var(--chair-h));
 }
 
 .sprite {
@@ -92,7 +153,7 @@ body {
   height: calc(min(100vw, 100vh) * 0.10965);
   background-repeat: no-repeat;
   z-index: 10;
-  outline: 2px solid red;
+  /* outline: 2px solid red; */
 }
 
 .laying-down {
@@ -106,7 +167,7 @@ body {
   background-position: center;
   background-repeat: no-repeat;
   z-index: 10;
-  outline: 2px solid red;
+  /* outline: 2px solid red; */
 }
 
 .glow {
@@ -142,100 +203,6 @@ body {
   background-repeat: no-repeat;
   background-size: contain;
 }
-
-/* .blocker {
-  position: absolute;
-  background: rgba(255, 0, 0, 0);
-}
-
-#block-top-wall {
-  left: 15%;
-  top: 0%;
-  width: 70%;
-  height: 19%;
-}
-
-#block-left-wall {
-  left: 0%;
-  top: 0%;
-  width: 15%;
-  height: 100%;
-}
-
-#block-right-wall {
-  left: 84%;
-  top: 0%;
-  width: 70%;
-  height: 100%;
-}
-
-#block-bottom-wall {
-  left: 15%;
-  top: 98%;
-  width: 100%;
-  height: 15%;
-}
-
-#block-bed {
-  left: 18%;
-  top: 20%;
-  width: 16.5%;
-  height: 26%;
-}
-
-#block-desk {
-  left: 61%;
-  top: 23%;
-  width: 20%;
-  height: 18%;
-}
-
-#block-chair {
-  left: 65.5%;
-  top: 42%;
-  width: 7%;
-  height: 4%;
-}
-
-#block-shoes {
-  left: 46%;
-  top: 89%;
-  width: 4%;
-  height: 5%;
-}
-
-.clicker {
-  position: absolute;
-  background: rgba(0, 0, 255, 0);
-}
-
-#click-bed {
-  left: 18%;
-  top: 20%;
-  width: 18%;
-  height: 38%;
-}
-
-#click-shoes {
-  left: 44%;
-  top: 88%;
-  width: 7%;
-  height: 8%;
-}
-
-#click-desk {
-  left: 59%;
-  top: 23%;
-  width: 23%;
-  height: 26%;
-}
-
-#click-chair {
-  left: 64.5%;
-  top: 42%;
-  width: 10%;
-  height: 16%;
-} */
 
 .pop-up-text {
   position: fixed;
