@@ -91,6 +91,7 @@ function move (e) {
   // switch from laying-down to walking sprite on first movement
   if (!sprite.data.moved) {
     nn.get('.laying-down').css('display', 'none')
+    nn.get('#lights-off').css('display', 'none')
     sprite.css('background-image', 'url(images/sprite-sheet.png)')
     sprite.data.moved = true
   }

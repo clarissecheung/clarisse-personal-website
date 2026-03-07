@@ -204,6 +204,21 @@ body {
   background-size: contain;
 }
 
+#lights-off {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-image: url(../images/lights-off.png);
+  background-size: contain;
+  background-position: center;
+  background-repeat: no-repeat;
+  pointer-events: none;
+  z-index: 15;
+  opacity: 0.8;
+}
+
 .pop-up-text {
   position: fixed;
   top: 0;
@@ -216,7 +231,7 @@ body {
   background-repeat: no-repeat;
   pointer-events: none;
   visibility: hidden;
-  z-index: 11;
+  z-index: 20;
 }
 
 .pop-up-exit {
@@ -231,7 +246,7 @@ body {
   background-repeat: no-repeat;
   pointer-events: none;
   visibility: hidden;
-  z-index: 12;
+  z-index: 21;
   cursor: pointer;
 }
 
@@ -244,7 +259,7 @@ body {
   height: min(75vw, 75vh);
   /* outline: 2px solid red; */
   pointer-events: none;
-  z-index: 13;
+  z-index: 22;
 }
 
 .dog-pics {
@@ -276,7 +291,7 @@ body {
 
 .text {
   position: absolute;
-  z-index: 14;
+  z-index: 23;
   color: #4e749c;
   visibility: hidden;
   text-align: left;
