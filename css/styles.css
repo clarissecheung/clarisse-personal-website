@@ -162,7 +162,7 @@ body {
   top: calc(50vh + min(100vw, 100vh) * 0.3375);
   width: calc(min(100vw, 100vh) * 0.185);
   height: calc(min(100vw, 100vh) * 0.085);
-  background-image: url(../images/laying-down-dog.png);
+  background-image: url(../images/penny-laying-right.png);
   background-size: calc(min(100vw, 100vh) * 0.661) calc(min(100vw, 100vh) * 0.489);
   background-position: center;
   background-repeat: no-repeat;

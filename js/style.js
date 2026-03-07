@@ -63,27 +63,31 @@ function move (e) {
   let newY = curY
   let frame = sprite.data.frame
   let facing = sprite.data.facing
+  let step = sprite.data.step || 0
   const speed = 25
+  const frameEvery = 5  // advance animation frame every N keypresses
   let row
+
+  step = (step + 1) % frameEvery
 
   if (e.key === 'ArrowLeft' || e.key === 'a') {
     newX -= speed
     facing = 'left'
     row = ROW_LEFT_WALK
-    frame = (frame + 1) % WALK_FRAMES
+    if (step === 0) frame = (frame + 1) % WALK_FRAMES
   } else if (e.key === 'ArrowRight' || e.key === 'd') {
     newX += speed
     facing = 'right'
     row = ROW_RIGHT_WALK
-    frame = (frame + 1) % WALK_FRAMES
+    if (step === 0) frame = (frame + 1) % WALK_FRAMES
   } else if (e.key === 'ArrowUp' || e.key === 'w') {
     newY -= speed
     row = facing === 'left' ? ROW_LEFT_WALK : ROW_RIGHT_WALK
-    frame = (frame + 1) % WALK_FRAMES
+    if (step === 0) frame = (frame + 1) % WALK_FRAMES
   } else if (e.key === 'ArrowDown' || e.key === 's') {
     newY += speed
     row = facing === 'left' ? ROW_LEFT_WALK : ROW_RIGHT_WALK
-    frame = (frame + 1) % WALK_FRAMES
+    if (step === 0) frame = (frame + 1) % WALK_FRAMES
   } else {
     return
   }
@@ -92,7 +96,7 @@ function move (e) {
   if (!sprite.data.moved) {
     nn.get('.laying-down').css('display', 'none')
     nn.get('#lights-off').css('display', 'none')
-    sprite.css('background-image', 'url(images/sprite-sheet.png)')
+    sprite.css('background-image', 'url(images/penny-sprite-sheet.png)')
     sprite.data.moved = true
   }
 
@@ -127,6 +131,7 @@ function move (e) {
 
   sprite.data.frame  = frame
   sprite.data.facing = facing
+  sprite.data.step   = step
   sprite.data.relX = (x - bounds.left) / bounds.width
   sprite.data.relY = (y - bounds.top)  / bounds.height
   nearObject()
